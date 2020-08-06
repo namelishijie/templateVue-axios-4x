@@ -1,50 +1,20 @@
+import {extend, localize} from 'vee-validate'
+import {required, email} from 'vee-validate/dist/rules' // 验证规则导入
 
-let ValidatorMessage = () => {
-  return {
-    required: field => `${field}不能为空`,
-    email: () => '请输入正确的邮箱格式'
+extend('required', required)
+extend('email', email)
+
+localize('zh_CN', {
+  name: 'zh_CN',
+  names: {
+    nationalID: '身份证号',
+  },
+  messages: {
+    required: (field) => `${field}不能为空`,
   }
-}
+})
 
-let ValidatorExtend = {
-  // phone: { // 验证手机号
-  //   messages: field => {
-  //     return field + '必须11位'
-  //   },
-  //   validate: value => {
-  //     return value.length == 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value)
-  //   }
-  // }
-}
-
-const UpdateDictionary = (Validator, Messages) => {
-  Validator.updateDictionary({
-    en: {
-      messages: {
-        ...Messages
-      }
-    }
-  })
-}
-
-const Extend = (config, object) => {
-  for(var key in object) {
-    config.extend(key, {
-      getMessage: object[key].messages,
-      validate: object[key].validate
-    })
-  }
-}
-
-export default {
-  install(Vue, config) {
-    UpdateDictionary(config, ValidatorMessage())
-    Extend(config, ValidatorExtend)
-    Vue.prototype.$ValidatorMessage = param => {
-      UpdateDictionary(config, param)
-    }
-    Vue.prototype.$ValidatorExtend = param => {
-      Extend(config, param)
-    }
-  }
-}
+extend('mobile', {
+  message: () => `请输入正确的手机号码`,
+  validate: value => value.length === 11 && /^(((13[0-9]{1})|(14[57]{1})|(15[012356789]{1})|(17[03678]{1})|(18[0-9]{1})|(19[89]{1})|(16[6]{1}))+\d{8})$/.test(value)
+})

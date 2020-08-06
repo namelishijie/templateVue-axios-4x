@@ -1,6 +1,4 @@
 export default {
-  toKen: ( state ) => state.toKen,
-  isloading(state) {
-    return state.isloading
-  }
+  toKen: state => state.toKen,
+  isloading: state => state.isloading
 }
